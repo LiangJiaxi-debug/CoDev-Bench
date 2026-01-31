@@ -1,0 +1,70 @@
+edit_repair: |
+    You will be provided with a partial code base, an issue statement explaining a problem to resolve, a commit patch that attempts to solve the issue but is incorrect, and human dialogue explaining what is wrong with the commit.
+    <issue>
+    {ISSUE TEXT}
+    </issue>
+
+    <code>
+    {CODE}
+    </code>
+
+    <commit patch>
+    {COMMIT PATCH}
+    </commit patch>
+
+    <dialogue>
+    {FEEDBACK}
+    </dialogue>
+
+    I need you to make multiple edits across one or more files in a repository to solve the provided issue. 
+    For each edit, output the changes in the following format: 
+    ```
+    <edit>
+    [start of the snippet before editing in <file_path>]
+    <code_before_edit>
+    [end of the snippet before editing in <file_path>]
+
+    [start of the snippet after editing in <file_path>]
+    <code_after_edit>
+    [end of the snippet after editing in <file_path>]
+    </edit>
+    ```
+    Notes:
+    - The <file_path> is the relative path of the file being edited.
+    - The <code_before_edit> snippet should include several lines before and after the modified region, unless the file was originally empty.
+    - If a file was originally empty, leave <code_before_edit> blank but ensure <code_after_edit> includes the new content.
+    - Ensure the edits are sequential and address all necessary changes to achieve the requested feature.
+
+    Here is an example of the output format:
+    <edit>
+    [start of the snippet before editing in src/code.py]
+    def factorial(a):
+      res = 1
+      while a >= 0:
+        res *= a
+      return res
+    [end of the snippet before editing in src/code.py]
+
+    [start of the snippet after editing in src/code.py]
+    def factorial(a):
+      assert type(a) == int and a >= 0
+      res = 1
+      while a >= 2:
+        res *= a
+        a -= 1
+      return res
+    [end of the snippet after editing in src/code.py]
+    </edit>
+
+    <edit>
+    [start of the snippet before editing in src/demo.py]
+    [end of the snippet before editing in src/demo.py]
+
+    [start of the snippet after editing in src/demo.py]
+    from code import factorial 
+    print(factorial(5))
+    [end of the snippet after editing in src/demo.py]
+    </edit>
+  
+    I need you to solve the provided issue with a series of edits in the above format.
+    Respond below:
